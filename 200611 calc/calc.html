@@ -1,0 +1,111 @@
+<!-- (All code is written by j18121 カオ　スアン　タン) -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>電卓</title>
+    <style>
+        body { margin: 0; padding: 0}
+        .container { max-width: 420px; background-color: #ececec}
+        .display { padding: 20px}
+        #sym { float: right; font-size: 30px; width: 35px; text-align: center; background-color: #56b9b1; border-radius: 0 0 0 80%;}
+        #input { text-align: left; min-height: 50px; font-size: 40px; margin-top: 15px}
+        #output { font-size: 50px; text-align: right; height: 50px}
+        div#output, div#input { white-space: nowrap;  overflow: hidden; text-overflow: clip}
+        .grid-container { display: grid; grid-template-columns: auto auto auto auto; grid-gap: 10px; padding: 10px}
+        .grid-container > div { text-align: center; padding: 20px 0; font-size: 30px; border-radius: 20px}
+        .grid-container > div:hover { cursor: pointer}
+        .zero{ grid-column-start: 1; grid-column-end: 3} 
+        #equ { grid-column-start: 3; grid-column-end: 5; background-color: #86ce89}
+        .num { background-color: #81c6ff}
+        #del, #clear { background-color: #d4da95}
+        .math { background-color: #df9cb5}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="sym"></div>
+        <div class="display">
+            <div id="input">Calculator</div>
+            <div id="output"></div>
+        </div>
+        <div class="grid-container">
+            <div id="clear">C</div>
+            <div id="del"><</div>
+            <div class="math" id="equ">=</div>
+            <div class="num">7</div>
+            <div class="num">8</div>
+            <div class="num">9</div>
+            <div class="math">+</div>
+            <div class="num">4</div>
+            <div class="num">5</div>
+            <div class="num">6</div>
+            <div class="math">-</div>
+            <div class="num">1</div>
+            <div class="num">2</div>
+            <div class="num">3</div>
+            <div class="math">×</div>
+            <div class="num zero">0</div>
+            <div class="num">.</div>
+            <div class="math">/</div>
+          </div>
+    </div>
+    <script>
+        var num = document.querySelectorAll('.num');
+        var math = document.querySelectorAll('.math');
+        var output = document.getElementById('output');
+        var input = document.getElementById('input');
+        var sym = document.getElementById('sym');
+        var typing = ''; // 入力中の値
+        var ip = 0; // 入力値
+        var op = 0; // 出力値
+        var cal = '+'; // 演算子
+        // 初期化
+        function clear() {
+            cal = '+'; op = 0;
+            typing = '';
+            output.innerHTML = '';
+            input.innerHTML = '';
+            sym.innerHTML = '';
+        }
+        // 数字入力
+        for (let i=0; i<num.length; i++) {
+            num[i].addEventListener('click', function() {
+                // イコール押して結果表示後、数字入力　ー＞　初期化
+                if (cal == '=') { clear()};
+                typing = typing + num[i].textContent;
+                input.innerHTML = typing;
+            });
+        }
+        // 全て消し
+        document.getElementById('clear').addEventListener('click', clear);
+        // 1文字ずつ消し
+        document.getElementById('del').addEventListener('click', function(){
+                typing = typing.substring(0, typing.length-1);
+                input.innerHTML = typing;
+        });
+        // 四則演算入力、計算
+        for (let j=0; j<math.length; j++) {
+            math[j].addEventListener('click', function() {
+                console.log(math[j].textContent);
+                if (typing != '') {
+                    if (typing.charAt(0) == '.') {
+                        typing = '0' + typing;
+                    }
+                    ip = parseFloat(typing);
+                    if (cal == '+') { op += ip}
+                    else if (cal == '-') { op -= ip}
+                    else if (cal == '×') { op *= ip}
+                    else if (cal == '/') { op /= ip}
+                }
+                typing = '';
+                input.innerHTML = '';
+                cal = math[j].textContent;
+                sym.innerHTML = cal;
+                output.innerHTML = op;
+            });
+        }
+    </script>
+</body>
+</html>
